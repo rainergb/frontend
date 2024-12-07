@@ -2,39 +2,28 @@ import Image from "next/image";
 import Link from "next/link";
 import { api } from "@/services/api";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 
-export default function Page() {
-  async function handleLogin(formData: FormData) {
+export default function Signup() {
+  async function handleRegister(formData: FormData) {
     "use server";
 
+    const name = formData.get("name") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    if (email === "" || password === "") {
+    if (!name || !email || !password) {
       return;
     }
 
     try {
       const response = await api.post("/session", {
+        name,
         email,
         password
       });
-
-      if (!response.data.token) {
-        return;
-      }
-
-      const expressTime = 60 * 60 * 24 * 30 * 1000;
-      cookies().set("session", response.data.token, {
-        maxAge: expressTime,
-        path: "/",
-        httpOnly: false,
-        secure: process.env.NODE_ENV === "production"
-      });
     } catch (err) {}
 
-    redirect("/dashboard");
+    redirect("/");
   }
 
   return (
@@ -50,7 +39,17 @@ export default function Page() {
         </div>
 
         <section>
-          <form action={handleLogin} className="space-y-4 ">
+          <h1 className="text-white text-[32px] font-bold mb-5">
+            Criando sua conta
+          </h1>
+          <form action={handleRegister} className="space-y-4">
+            <input
+              type="text"
+              required
+              name="name"
+              placeholder="Digite seu nome"
+              className="w-full px-4 py-2 rounded-md bg-[#1d1d2e] text-white border border-gray-500"
+            />
             <input
               type="email"
               required
@@ -62,7 +61,7 @@ export default function Page() {
               type="password"
               required
               name="password"
-              placeholder="Sua senha"
+              placeholder="Digite sua senha"
               className="w-full px-4 py-2 rounded-md bg-[#1d1d2e] text-white border border-gray-500"
             />
 
@@ -70,12 +69,12 @@ export default function Page() {
               type="submit"
               className="w-full py-3 bg-[#FF3f4b] text-white font-bold rounded-md hover:bg-red-700"
             >
-              Acessar
+              Cadastrar
             </button>
           </form>
 
-          <Link href="/signup" className="block mt-4 text-sm text-white">
-            Não possui uma conta? Cadastre-se
+          <Link href="/" className="block mt-4 text-sm text-white">
+            Já possui uma conta? Faça login
           </Link>
         </section>
       </div>
