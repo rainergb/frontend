@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 
-export function getCookiServer(){
-    const token = cookies().get("session")?.value;
+export function getCookieServer() {
+  const token = cookies().get("session")?.value;
 
-    return token || null;
+  return token || null;
 }

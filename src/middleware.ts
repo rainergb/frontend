@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCookiServer } from "./lib/cookieServer";
+import { getCookieServer } from "./lib/cookieServer";
 import { api } from "./services/api";
 
 export async function middleware(req: NextRequest) {
@@ -9,7 +9,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = getCookiServer();
+  const token = getCookieServer();
 
   if (pathname.startsWith("/dashboard")) {
     if (!token) {

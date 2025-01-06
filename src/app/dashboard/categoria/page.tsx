@@ -1,12 +1,12 @@
-"use client";
 import { api } from "@/services/api";
 import Button from "../components/button";
 import Input from "../components/input";
-import { useRouter } from "next/navigation";
-import { getCookiServer } from "@/lib/cookieServer";
+import { getCookieServer } from "@/lib/cookieServer";
+import { redirect } from "next/navigation";
 
 export default function Category() {
   async function handleRegisterCategory(formData: FormData) {
+    "use server";
     const name = formData.get("name");
 
     if (name === "") console.log(name);
@@ -15,7 +15,7 @@ export default function Category() {
       name: name
     };
 
-    const token = await getCookiServer();
+    const token = await getCookieServer();
 
     const response = await api
       .post("/category", data, {
@@ -27,11 +27,11 @@ export default function Category() {
         console.log(err);
       });
 
-    console.log(response);
+    redirect("/dashboard");
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-start justify-center min-h-screen pt-12">
       <div className="p-8 rounded-lg w-full max-w-[720px]">
         <h1 className="text-3xl font-bold text-white mb-6">Nova categoria</h1>
         <form
@@ -50,7 +50,4 @@ export default function Category() {
       </div>
     </div>
   );
-}
-function jwt_decode(token: string): any {
-  throw new Error("Function not implemented.");
 }
